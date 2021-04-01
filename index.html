@@ -1,0 +1,57 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JavaPoly Tests</title>
+  <link href="mocha/mocha.css" rel="stylesheet" />
+  <link href="style.css" rel="stylesheet" />
+
+  <script type="text/javascript" src="build/javapoly.js"></script>
+  <script type="application/java" src="jars/Renjin.jar"></script>
+
+</head>
+<body>
+  <ul class="workerChoice">
+    <li class="browser"><a href='/'>Browser version</a></li>
+    <li class="worker"><a href='/?worker=build/javapoly_worker.js'>Web worker version</a></li>
+  </ul>
+
+  <div id="mocha"></div>
+
+  <script src="expect/umd/expect.min.js"></script>
+  <script src="mocha/mocha.js"></script>
+
+  <script src="units/util.js"></script>
+  <script src="units/renjin.js"></script>
+
+  <script type="text/javascript">
+    mocha.setup('bdd');
+
+    var params = getParams(window.location.search);
+    var isWorkerBased = !!params.worker; //!!defaultJavapoly.options.worker;
+    document.querySelector(".workerChoice " + (isWorkerBased ? ".worker" : ".browser")).classList.add("selected");
+    var titleSuffix = isWorkerBased ? " Web Worker" : " Browser";
+
+    var checkJavaPolyLoaded = function (done) {
+      if ( typeof defaultJavapoly !== 'undefined' ) {
+        done();
+      } else {
+        setTimeout(checkJavaPolyLoaded, 100, done);
+      }
+    }
+
+    // ensure the javapoly lib has been loaded, especially when async loading javapoly lib
+    before( function(done) {
+      checkJavaPolyLoaded(done);
+    });
+    
+    describe('JavaPoly' + titleSuffix, function() {
+      this.timeout(100000); // Let jvm start
+
+      testRExecution();
+
+    });
+
+    mocha.run();
+  </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+import { FileSystem, BaseFileSystem } from '../core/file_system';
+import { ApiError } from '../core/api_error';
+import { FileFlag } from '../core/file_flag';
+import { File } from '../core/file';
+import { default as Stats } from '../core/node_fs_stats';
+import { PreloadFile } from '../generic/preload_file';
+import LockedFS from '../generic/locked_fs';
+export declare class UnlockedOverlayFS extends BaseFileSystem implements FileSystem {
+    private _writable;
+    private _readable;
+    private _isInitialized;
+    private _initializeCallbacks;
+    private _deletedFiles;
+    private _deleteLog;
+    constructor(writable: FileSystem, readable: FileSystem);
+    private checkInitialized();
+    private checkInitAsync(cb);
+    getOverlayedFileSystems(): {
+        readable: FileSystem;
+        writable: FileSystem;
+    };
+    private createParentDirectoriesAsync(p, cb);
+    private createParentDirectories(p);
+    static isAvailable(): boolean;
+    _syncAsync(file: PreloadFile<UnlockedOverlayFS>, cb: (err: ApiError) => void): void;
+    _syncSync(file: PreloadFile<UnlockedOverlayFS>): void;
+    getName(): string;
+    initialize(cb: (err?: ApiError) => void): void;
+    isReadOnly(): boolean;
+    supportsSynch(): boolean;
+    supportsLinks(): boolean;
+    supportsProps(): boolean;
+    private deletePath(p);
+    private undeletePath(p);
+    rename(oldPath: string, newPath: string, cb: (err?: ApiError) => void): void;
+    renameSync(oldPath: string, newPath: string): void;
+    stat(p: string, isLstat: boolean, cb: (err: ApiError, stat?: Stats) => void): void;
+    statSync(p: string, isLstat: boolean): Stats;
+    open(p: string, flag: FileFlag, mode: number, cb: (err: ApiError, fd?: File) => any): void;
+    openSync(p: string, flag: FileFlag, mode: number): File;
+    unlink(p: string, cb: (err: ApiError) => void): void;
+    unlinkSync(p: string): void;
+    rmdir(p: string, cb: (err?: ApiError) => void): void;
+    rmdirSync(p: string): void;
+    mkdir(p: string, mode: number, cb: (err: ApiError, stat?: Stats) => void): void;
+    mkdirSync(p: string, mode: number): void;
+    readdir(p: string, cb: (error: ApiError, files?: string[]) => void): void;
+    readdirSync(p: string): string[];
+    exists(p: string, cb: (exists: boolean) => void): void;
+    existsSync(p: string): boolean;
+    chmod(p: string, isLchmod: boolean, mode: number, cb: (error?: ApiError) => void): void;
+    chmodSync(p: string, isLchmod: boolean, mode: number): void;
+    chown(p: string, isLchmod: boolean, uid: number, gid: number, cb: (error?: ApiError) => void): void;
+    chownSync(p: string, isLchown: boolean, uid: number, gid: number): void;
+    utimes(p: string, atime: Date, mtime: Date, cb: (error?: ApiError) => void): void;
+    utimesSync(p: string, atime: Date, mtime: Date): void;
+    private operateOnWritable(p, f);
+    private operateOnWritableAsync(p, cb);
+    private copyToWritable(p);
+    private copyToWritableAsync(p, cb);
+}
+export default class OverlayFS extends LockedFS<UnlockedOverlayFS> {
+    constructor(writable: FileSystem, readable: FileSystem);
+    initialize(cb: (err?: ApiError) => void): void;
+    static isAvailable(): boolean;
+    getOverlayedFileSystems(): {
+        readable: FileSystem;
+        writable: FileSystem;
+    };
+}

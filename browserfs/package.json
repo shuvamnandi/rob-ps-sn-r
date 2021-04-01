@@ -1,0 +1,112 @@
+{
+  "_from": "browserfs@^0.5.12",
+  "_id": "browserfs@0.5.13",
+  "_inBundle": false,
+  "_integrity": "sha1-dCrq095+QRxUKOz0EnRBaLR30nk=",
+  "_location": "/browserfs",
+  "_phantomChildren": {
+    "lodash": "4.17.21"
+  },
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "browserfs@^0.5.12",
+    "name": "browserfs",
+    "escapedName": "browserfs",
+    "rawSpec": "^0.5.12",
+    "saveSpec": null,
+    "fetchSpec": "^0.5.12"
+  },
+  "_requiredBy": [
+    "/",
+    "/@hrj/doppiojvm-snapshot"
+  ],
+  "_resolved": "https://registry.npmjs.org/browserfs/-/browserfs-0.5.13.tgz",
+  "_shasum": "742aead3de7e411c5428ecf412744168b477d279",
+  "_spec": "browserfs@^0.5.12",
+  "_where": "/Users/shuvamnandi/Academics/NUS/Semester3/CS4215/Project/origJavaPoly/JavaPoly",
+  "aliasify": {
+    "aliases": {
+      "fs": "./src/core/node_fs.ts",
+      "wrapped-assert": "./test/harness/wrapped-assert.ts"
+    }
+  },
+  "author": {
+    "name": "John Vilk",
+    "email": "jvilk@cs.umass.edu",
+    "url": "http://people.cs.umass.edu/~jvilk"
+  },
+  "bugs": {
+    "url": "https://github.com/jvilk/BrowserFS/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "async": "^2.0.1",
+    "pako": "^1.0.0"
+  },
+  "deprecated": false,
+  "description": "A filesystem in your browser!",
+  "devDependencies": {
+    "aliasify": "^2.0.0",
+    "archiver": "^1.0.1",
+    "bfs-buffer": "^0.1.7",
+    "bfs-path": "^0.1.2",
+    "bfs-process": "^0.1.6",
+    "browserify": "^13.0.0",
+    "browserify-derequire": "~0.9.4",
+    "browserify-shim": "^3.8.12",
+    "coffee-script": "^1.10.0",
+    "detect-browsers": "^2.0.0",
+    "dropbox": "^0.10.3",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-exorcise": "^2.1.1",
+    "grunt-istanbul": "^0.7.0",
+    "grunt-karma": "^2.0.0",
+    "grunt-shell": "^1.2.1",
+    "grunt-ts": "^5.3.2",
+    "karma": "^1.2.0",
+    "karma-browserify": "^5.0.2",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^1.1.1",
+    "karma-opera-launcher": "^1.0.0",
+    "karma-safari-launcher": "^1.0.0",
+    "mocha": "^3.0.2",
+    "mold-source-map": "^0.4.0",
+    "object-wrapper": "^0.1.1",
+    "remap-istanbul": "^0.5.1",
+    "tsify": "^1.0.3",
+    "typescript": "^1.8.2",
+    "underscore": "^1.8.3"
+  },
+  "engines": {
+    "node": ">= 0.10"
+  },
+  "homepage": "https://github.com/jvilk/BrowserFS",
+  "keywords": [
+    "filesystem",
+    "node",
+    "storage"
+  ],
+  "license": "MIT",
+  "main": "dist/browserfs.js",
+  "name": "browserfs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvilk/BrowserFS.git"
+  },
+  "scripts": {
+    "prepublish": "grunt dist",
+    "test": "grunt test"
+  },
+  "typings": "dist/node/main",
+  "version": "0.5.13"
+}

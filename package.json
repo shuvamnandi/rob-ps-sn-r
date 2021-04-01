@@ -1,0 +1,8 @@
+{
+    "name": "doppio-tests",
+    "description": "Our sample Doppio Test app",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    }
+  }
