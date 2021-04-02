@@ -1,6 +1,5 @@
 #root {
   background-color: white;
-  
 }
 
 #input {
@@ -8,7 +7,7 @@
   float: left;
   margin-left: 10px;
   height: 80%;
-  width: 48%
+  width: 20%
 }
 
 #output {
@@ -16,7 +15,7 @@
   float: right;
   margin-right: 10px;
   height: 80%;
-  width: 48%
+  width: 30%
 }
 
 .btn {

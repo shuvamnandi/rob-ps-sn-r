@@ -6,18 +6,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <!-- <link rel="import" href="/path/to/imports/stuff.html"> -->
+  <link rel="stylesheet" href="css/codemirror.css" />
   <link rel="stylesheet" href="css/style.css" />
+  
   <script type="text/javascript" src="build/javapoly.js"></script>
+  <script type="text/javascript" src="lib/codemirror.js"></script>
+  <script type="text/javascript" src="lib/r.js"></script>
   <script type="application/java" src="jars/Renjin.jar"></script>
 
 </head>
 <body>
   <div id="root">
     <div class="center">
-      <button onclick=executeR() id="executeRButton" class="btn" type="submit" name="action">ExecuteR!</button>
+      <button onclick=executeR() id="executeRButton" class="btn" type="submit" name="action">Evaluate R</button>
     </div>
-    
+
     <div class="input-field col s12">
       <textarea id="input"></textarea>
         <label for="input" style="color: white;">Enter R Code here</label>
@@ -31,7 +34,29 @@
   
   
   <script type="text/javascript">
+    var cm1 = CodeMirror.fromTextArea(document.getElementById("input"), {
+      name: "R",
+      lineNumbers: true
+    });
+
+    var cm2 = CodeMirror.fromTextArea(document.getElementById("output"), {
+      name: "R",
+      readOnly: true
+    });
+    
+    var t0 = new Date().getTime();
+    console.log(t0);
+    JavaPoly.type('com.shuvamnandi.RenjinExample').then(function(Renjin) {
+      Renjin.evalR("3.0 + 20.6").then(function(result) {
+          var t1 = new Date().getTime();
+          console.log("Result of R code eval: " + result);
+          console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
+      });
+    });
+    // setTimeout(() => { console.log("Done") }, 40000);
+
     function executeR() {
+      cm1.save();
       console.log("Button Clicked to run code");
       let rCode = document.getElementById("input").value;
       console.log(rCode);
@@ -43,21 +68,18 @@
             console.log("Result of R code eval with button click: " + result);
             evalResult = result;
             outputArea.value = evalResult;
+            cm2.setValue(outputArea.value);
           }).catch(err => {
             outputArea.value = "Error occurred in R evaluation: \n" + err.message;
+            cm2.setValue(outputArea.value);
           });;
         }
         catch(err) {
           outputArea.value = "Error occurred in evaluation: \n" + err.message;
+          cm2.setValue(outputArea.value);
         }
       });
     }
-
-    JavaPoly.type('com.shuvamnandi.RenjinExample').then(function(Renjin) {
-      Renjin.evalR("3.0 + 20.6").then(function(result) {
-          console.log("Result of R code eval: " + result);
-      });
-    });
 
   </script>
 </body>
