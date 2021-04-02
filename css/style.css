@@ -5,8 +5,31 @@
 
 #input {
   border-radius: 1em;
+  float: left;
+  margin-left: 10px;
+  height: 80%;
+  width: 48%
 }
 
 #output {
   border-radius: 1em;
+  float: right;
+  margin-right: 10px;
+  height: 80%;
+  width: 48%
+}
+
+.btn {
+  box-sizing: border-box;
+  padding: 10px;
+  margin: 10px;
+  height: 50px;
+  align-content: center;
+  object-position: center;
+  position: relative;
+}
+
+.center {
+  margin: auto;
+  padding: 10px;
 }

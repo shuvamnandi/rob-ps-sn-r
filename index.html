@@ -2,43 +2,31 @@
 <head>
   <meta charset="utf-8">
   <title>R on Browser (RoB)</title>
-  <!-- <link rel="import" href="/path/to/imports/stuff.html"> -->
-  <link rel="stylesheet" href="css/style.css" />
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
+  <!-- <link rel="import" href="/path/to/imports/stuff.html"> -->
+  <link rel="stylesheet" href="css/style.css" />
   <script type="text/javascript" src="build/javapoly.js"></script>
   <script type="application/java" src="jars/Renjin.jar"></script>
 
 </head>
 <body>
   <div id="root">
-    <div class="row">
-      <form class="col s12">
-        <div class="row">
-          <div class="input-field col s12">
-            <textarea id="input" style="height:200px; width:400px"></textarea>
-            <label for="input" style="color: white;">Enter R Code here</label>
-          </div>
-        </div>
-      </form>
+    <div class="center">
+      <button onclick=executeR() id="executeRButton" class="btn" type="submit" name="action">ExecuteR!</button>
     </div>
     
-    <button onclick=executeR() class="btn waves-effect waves-light red" type="submit" name="action">ExecuteR!</button>
-    
-    <div class="row">
-      <form class="col s12">
-        <div class="row">
-          <div class="input-field col s12">
-            <textarea id="output" readonly style="height:200px; width:400px"></textarea>
-          </div>
-        </div>
-      </form>
+    <div class="input-field col s12">
+      <textarea id="input"></textarea>
+        <label for="input" style="color: white;">Enter R Code here</label>
     </div>
 
+    <div class="input-field col s12">
+      <textarea id="output" readonly></textarea>
+    </div>
+    
   </div>
   
   
@@ -48,14 +36,21 @@
       let rCode = document.getElementById("input").value;
       console.log(rCode);
       let evalResult = undefined;
+      let outputArea = document.getElementById("output");
       JavaPoly.type('com.shuvamnandi.RenjinExample').then(function(Renjin) {
-        Renjin.evalR(rCode).then(function(result) {
-              console.log("Result of R code eval with button click: " + result);
-              evalResult = result;
-              document.getElementById("output").value = evalResult;
-          });
+        try {
+          Renjin.evalR(rCode).then(function(result) {
+            console.log("Result of R code eval with button click: " + result);
+            evalResult = result;
+            outputArea.value = evalResult;
+          }).catch(err => {
+            outputArea.value = "Error occurred in R evaluation: \n" + err.message;
+          });;
         }
-      );
+        catch(err) {
+          outputArea.value = "Error occurred in evaluation: \n" + err.message;
+        }
+      });
     }
 
     JavaPoly.type('com.shuvamnandi.RenjinExample').then(function(Renjin) {
