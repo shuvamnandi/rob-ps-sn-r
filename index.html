@@ -8,6 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <link rel="stylesheet" href="css/codemirror.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/ayu-dark.css" />
   
   <script type="text/javascript" src="build/javapoly.js"></script>
   <script type="text/javascript" src="lib/codemirror.js"></script>
@@ -23,10 +24,9 @@
 
     <div class="input-field col s12">
       <textarea id="input"></textarea>
-        <label for="input" style="color: white;">Enter R Code here</label>
     </div>
 
-    <div class="input-field col s12">
+    <div class="input-field col s12 red">
       <textarea id="output" readonly></textarea>
     </div>
     
@@ -34,49 +34,75 @@
   
   
   <script type="text/javascript">
-    var cm1 = CodeMirror.fromTextArea(document.getElementById("input"), {
+    let sysOutCount = 2;
+    let sysErrCount = 0;
+    let cm1 = CodeMirror.fromTextArea(document.getElementById("input"), {
       name: "R",
-      lineNumbers: true
+      lineNumbers: true //,
+      //theme : "ayu-dark"
     });
 
-    var cm2 = CodeMirror.fromTextArea(document.getElementById("output"), {
+    let cm2 = CodeMirror.fromTextArea(document.getElementById("output"), {
       name: "R",
-      readOnly: true
+      readOnly: true //,
+      //theme : "ayu-dark"
     });
+
+    let outputArea = document.getElementById("output");
+      
+    console.log(JavaPoly.DoppioManager);
     
-    var t0 = new Date().getTime();
+    let t0 = new Date().getTime();
     console.log(t0);
     JavaPoly.type('com.shuvamnandi.RenjinExample').then(function(Renjin) {
       Renjin.evalR("3.0 + 20.6").then(function(result) {
-          var t1 = new Date().getTime();
+          let t1 = new Date().getTime();
           console.log("Result of R code eval: " + result);
           console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
       });
     });
     // setTimeout(() => { console.log("Done") }, 40000);
 
+    function handleEvalSuccess(result) {
+      let evalSuccessOutput = "";
+      console.log("Result of R code eval with button click: " + result);
+      for (i = sysOutCount; i < JavaPoly.getInstance(1).systemOutputs.length; i++) {
+        evalSuccessOutput += JavaPoly.getInstance(1).systemOutputs[i]; // collect System.out.println
+        sysOutCount++;
+      }
+      evalSuccessOutput += result; // Add evaluation result at the end
+      outputArea.value = evalSuccessOutput;
+      cm2.setValue(evalSuccessOutput);
+    }
+
+    function handleEvalError(err) {
+      let evalErrorOutput = "Error occurred in R evaluation: \n";
+      console.log("Error occured in R code eval: " + err.message);
+      for (i = sysErrCount; i < JavaPoly.getInstance(1).systemErrors.length; i++) {
+        evalErrorOutput += JavaPoly.getInstance(1).systemErrors[i];  // collect system errors
+        sysErrCount++;
+      }
+      evalErrorOutput += err.message;
+      outputArea.value = evalErrorOutput
+      cm2.setValue(outputArea.value);
+    }
+
+
     function executeR() {
-      cm1.save();
+      cm1.save(); // Put editor content to text area "input"
       console.log("Button Clicked to run code");
       let rCode = document.getElementById("input").value;
       console.log(rCode);
-      let evalResult = undefined;
-      let outputArea = document.getElementById("output");
       JavaPoly.type('com.shuvamnandi.RenjinExample').then(function(Renjin) {
         try {
           Renjin.evalR(rCode).then(function(result) {
-            console.log("Result of R code eval with button click: " + result);
-            evalResult = result;
-            outputArea.value = evalResult;
-            cm2.setValue(outputArea.value);
+            handleEvalSuccess(result);
           }).catch(err => {
-            outputArea.value = "Error occurred in R evaluation: \n" + err.message;
-            cm2.setValue(outputArea.value);
-          });;
+            handleEvalError(err);
+          });
         }
         catch(err) {
-          outputArea.value = "Error occurred in evaluation: \n" + err.message;
-          cm2.setValue(outputArea.value);
+          handleEvalError(err);
         }
       });
     }

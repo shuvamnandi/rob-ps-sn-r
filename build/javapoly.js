@@ -18876,6 +18876,18 @@ var JavaPolyBase = function () {
      */
     this.dispatcher = null;
 
+    /**
+     * The array to store all system outputs
+     * @Type {array}
+     */
+    this.systemOutputs = [];
+
+    /**
+     * The array to store all system errors
+     * @Type {array}
+     */
+    this.systemErrors = [];
+
     var dispatcherDeferred = new _CommonUtils2.default.deferred();
     this.dispatcherReady = dispatcherDeferred.promise;
     this.initJavaPoly(dispatcherDeferred.resolve, dispatcherDeferred.reject);
@@ -20125,12 +20137,14 @@ var DoppioManager = function () {
         var ds = data.toString();
         if (ds != "\n") {
           console.log("JVM " + _this9.javapoly.getId() + " stdout>", ds);
+          _this9.javapoly.systemOutputs.push(ds);
         }
       });
       this.process.stderr.on('data', function (data) {
         var ds = data.toString();
         if (ds != "\n") {
           console.warn("JVM " + _this9.javapoly.getId() + " stderr>", ds);
+          _this9.javapoly.systemErrors.push(ds);
         }
       });
     }
